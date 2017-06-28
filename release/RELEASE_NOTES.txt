@@ -1,0 +1,259 @@
+-----------------------------------
+ruby-assess version 1.1.8 (Tue Apr 11 15:37:49 CDT 2017)
+-----------------------------------
+- Fixed and enhanced assessment summary
+
+-----------------------------------
+ruby-assess version 1.1.7 (Mon Mar 27 15:17:35 CDT 2017)
+-----------------------------------
+- Fixed release bundle creating errors, platform soft links where not getting created
+
+-----------------------------------
+ruby-assess version 1.1.6 (Wed Mar 22 22:29:32 CDT 2017)
+-----------------------------------
+- Tool install log written to a seperate file
+
+-----------------------------------
+ruby-assess version 1.1.5 (Thu Mar 16 15:03:15 CDT 2017)
+-----------------------------------
+- Added 'known tool bug' for tool failures: spree-3.2.0rc2 with reek-3.1, railsgoat-9052b4fcf0 with dawnscanner-1.6.7
+
+-----------------------------------
+ruby-assess version 1.1.4 (Mon Mar 13 20:03:39 CDT 2017)
+-----------------------------------
+- Added error checking for reek
+
+-----------------------------------
+ruby-assess version 1.1.2 (Wed Mar  1 16:41:39 CST 2017)
+-----------------------------------
+- Updated default ruby to 2.4.0
+
+-----------------------------------
+ruby-assess version 1.0.7 (Fri Oct 21 15:23:09 CDT 2016)
+-----------------------------------
+- Merge branch 'master' of grilled.cs.wisc.edu:/p/swamp/gits/ruby-assess
+
+- SKIP install OS dependencies if internet-inaccessible attribute in run.conf
+
+- Updated util/create_release_notes.sh and util/create_release_bundle.sh
+
+- Changed install.out, install.err to gem_install.out, gem_install.err
+
+- Updated release/RELEASE_NOTES.txt and util/create_release_notes.sh
+
+-----------------------------------
+ruby-assess version 1.0.6 (Wed Oct 12 14:49:49 CDT 2016)
+-----------------------------------
+- cd-package-dir|cd-config-dir|cd-build-dir to chdir-package-dir|chdir-config-dir|chdir-build-dir
+
+-----------------------------------
+ruby-assess version 1.0.5 (Mon Oct 10 17:07:39 CDT 2016)
+-----------------------------------
+- Handling Empty Packages
+
+- Added support for error handling for invalid pkg-dir, build-dir, config-dir
+
+- Merge branch 'master' of /p/swamp/gits/ruby-assess
+
+- Merge branch 'master' of grilled.cs.wisc.edu:/p/swamp/gits/ruby-assess
+
+- Commented out lines in src/assess.py that check if report, stdout, stderr files are created
+
+- libyaml does not install correctly on debuntu, need libyaml-dev
+
+- New and future platform names
+
+- Add error checking when installing binaries
+
+- Add additional p_swamp mechanism for vamshi laptop
+
+- Correct dirs for OLD style and NEW style rvm
+
+- libyaml always needed to build
+
+- Add new platforms + releases
+
+- Add centos-7.2 and other el7
+
+- When auto-generating a default ruby, use a version number
+
+- ln -sf to allow redoing a build w/out errors
+
+- New fedora platforms
+
+- Fixed dawnscanner failure, had to not set GEM_HOME, because it looks at Gemfile.lock and the package dependencies
+
+- Delete ruby binaries; they are now in the framework archive area.
+
+- Platform layer tools are now copied from the platform distribution
+- when a framework is generated.
+
+- Base platform, binary platform, and alias platform configuration file.
+
+- Use the update-platform tool to add platform layer scripts
+- to the generated framework structure.
+
+- Install versioned rvm+ruby if available.
+- otherwise, assume non-versioned and assume it matches version info
+- in build_assess_driver.
+
+- If a rvm isn't available, it will download and install it and a ruby
+- on the fly.   The compiled rvm is saved to $VMOUTPUTDIR for reference
+- and to create new binary rv+rubies.
+
+- Don't switch RVM context w/out need.  Otherise the PATH explodes because
+- RVM doesn't edit the path correctly.
+
+- Keep track of installed, prefered and desired rubies to help with all
+- of the above.
+
+- Add support for changing default ruby versions on some platforms to take
+- care of compatability issues even in case rubies need to be downloaded.
+
+- Install minimal ruby dependencies needed for successful operation of
+- build-assess-driver.  These are generated on the fly to minimize
+- non-dependency installs.
+
+- Add error checking for rvm & ruby installs to try and generate errors.
+- Unfortunately rvm does not generate good exit statii.
+
+- Use platform-layer tools: get-platform and install-dependencies.
+
+- Make logging more text-log-friendly.
+
+- New and correct dependencies for existing swamp platforms.
+- Add dependencies for new swamp platforms and for testing.
+
+- Build a default platform, which can be 'noarch'.
+
+- Generate binary platforms, which shadow noarch.
+
+- Generate alias platforms, which are another name for a binary platform.
+
+- Extract ruby binaries from the framework binary repository.
+
+- Use an -arch dir which allows for different rubies on different platforms.
+
+- Updated release notes
+
+-----------------------------------
+ruby-assess version 0.9.7 (Tue Mar  1 15:13:53 CST 2016)
+-----------------------------------
+- Again! Fixed issue that did not make it work with lizard and cloc
+
+-----------------------------------
+ruby-assess version 0.9.6 (Mon Feb 29 21:49:50 CST 2016)
+-----------------------------------
+- Fixed issue that did not make it work with lizard
+
+- Updated release notes
+
+-----------------------------------
+ruby-assess version 0.9.5 (Thu Feb 25 14:06:17 CST 2016)
+-----------------------------------
+- Upgraded default ruby to v2.3.0
+
+- Build and Configure commands are passed to shell
+
+- Works with tools and dependencies installed from local gems
+
+- Updated ply to 3.8, and added the copyrights file
+
+- Added 'srcfile' build_artifacts, this is required for lizard tool
+
+-----------------------------------
+ruby-assess version 0.9.4 (Wed Dec 16 19:42:50 CST 2015)
+-----------------------------------
+- Ruby assess can now work on all the 9 SWAMP platforms
+
+- New os_walk which doesn't use python-3.3 feature 'yield from'
+
+-----------------------------------
+ruby-assess version 0.9.3 (Wed Nov 16 19:42:50 CST 2015)
+-----------------------------------
+- Brought in OS package 'libyaml' and 'libffi' into the framework. These packages are no longer available into EPEL
+
+- Fixed printing ruby-assess version issue
+
+-----------------------------------
+ruby-assess version 0.9.2 (Fri Aug 21 07:25:49 CDT 2015)
+-----------------------------------
+- Fixed the bug with RVM portability
+
+-----------------------------------
+ruby-assess version 0.9.1 (Tue Aug 11 09:15:42 CDT 2015)
+-----------------------------------
+- Removed printing of excessive debug info
+
+-----------------------------------
+ruby-assess version 0.9.0 (Thu Aug  6 19:18:56 CDT 2015)
+-----------------------------------
+
+- Added support for Dawnscanner and Brakeman
+
+- Added support for build systems: bundler+rake, bundle+other, rake, other
+
+- Added support for installing and using multiple ruby versions
+
+- Added support for configure command
+
+- Fixed bug with exclude files from assessment
+
+-----------------------------------
+ruby-assess version 0.8.9 (Fri Jun 26 21:19:58 UTC 2015)
+-----------------------------------
+- Ommited test files from assessment
+
+- Added support for reek
+
+-----------------------------------
+ruby-assess version 0.8.8 (Tue Jun 23 21:39:23 UTC 2015)
+-----------------------------------
+- To avoid the bug in ruby-lint, it is now called on every individual file seperately
+
+- Enhanced error handling for build failure
+
+- modularized ruby setup
+
+- Removed directory_scanner.py
+
+- Added 'configure' to build_summary
+
+-----------------------------------
+ruby-assess version 0.8.6 (Wed Jun 10 19:42:01 UTC 2015)
+-----------------------------------
+- Changed the build-sys for gems back to rubygems from no-build
+
+-----------------------------------
+ruby-assess version 0.8.5 (Fri Jun  5 20:56:46 UTC 2015)
+-----------------------------------
+- Package Language disabled for Ruby
+
+-----------------------------------
+ruby-assess version 0.8.4 (Wed Jun  3 18:24:05 UTC 2015)
+-----------------------------------
+- Added error checking code for ruby-lint
+
+- Ruby gems are now identified with .gem extenstion rather than build-sys=rubygems. build-sys for rubygems can now be no-build
+
+-----------------------------------
+java-assess version 0.8.3 (Tue Jun  2 20:08:54 UTC 2015)
+-----------------------------------
+
+- Added quiet option to unzip ruby installation bundle, so that run.out remains concise
+
+-----------------------------------
+ruby-assess version 0.8.2 (Tue Jun  2 19:02:57 UTC 2015)
+-----------------------------------
+- Changed check for nobuild package types from build-sys=nobuild to build-sys=no-build
+
+-----------------------------------
+ruby-assess version 0.8.1 (Tue Jun  2 13:46:46 UTC 2015)
+-----------------------------------
+- Removed installation of bundler gem, this fixed crashing issue of rubylint
+
+-----------------------------------
+ruby-assess 0.8.0  (Mon Jun  1 21:30:53 UTC 2015)
+-----------------------------------
+- Support to assess ruby gems and ruby 'nobuild' packages
+- Support for ruby tools ruby-lint (2.0.4) and rubocop (0.31.0)
