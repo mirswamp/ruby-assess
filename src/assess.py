@@ -254,7 +254,7 @@ class SwaTool:
                 raise UnpackArchiveError(self._tool_conf['tool-archive'])
 
     def _get_env(self):
-        gem_user_dir = subprocess.getoutput("ruby -rubygems -e 'puts Gem.user_dir'")
+        gem_user_dir = subprocess.getoutput("ruby -r rubygems -e 'puts Gem.user_dir'")
         #logging.info('GEM USER DIR: %s', gem_user_dir)
         new_env = dict(os.environ)
         new_env['PATH'] = '%s/bin:%s' % (gem_user_dir, new_env.get('PATH', ''))
@@ -525,13 +525,10 @@ class Dawnscanner(RubyTool):
         RubyTool.__init__(self, input_root_dir, output_root_dir, tool_root_dir)
 
     def _get_env(self):
-        gem_user_dir = subprocess.getoutput("ruby -rubygems -e 'puts Gem.user_dir'")
-        #logging.info('GEM USER DIR: %s', gem_user_dir)
+        gem_user_dir = subprocess.getoutput("ruby -r rubygems -e 'puts Gem.user_dir'")
         new_env = dict(os.environ)
         new_env['PATH'] = '%s/bin:%s' % (gem_user_dir, new_env.get('PATH', ''))
-        #new_env['GEM_HOME'] = '%s' % (gem_user_dir)
         new_env['GEM_PATH'] = '%s' % (gem_user_dir)
-        #new_env['GEM_PATH'] = '%s:%s' % (gem_user_dir, new_env.get('GEM_PATH', ''))
         return new_env
     
 
