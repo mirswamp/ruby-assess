@@ -1,4 +1,9 @@
 -----------------------------------
+ruby-assess version 1.1.9 (Thu Jun  7 11:48:45 CDT 2018)
+-----------------------------------
+- Fixed rubygems depricated command line option issue
+
+-----------------------------------
 ruby-assess version 1.1.8 (Tue Apr 11 15:37:49 CDT 2017)
 -----------------------------------
 - Fixed and enhanced assessment summary
