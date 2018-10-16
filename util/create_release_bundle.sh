@@ -249,6 +249,11 @@ function main {
 
     md5_sum "$dest_dir"
 
+    (
+	local framework=$(basename "$dest_dir")
+	cd $(dirname "$dest_dir");
+	tar cf "${dest_dir}.tar" "$dest_dir"
+    )
 }
 
 if [ $# -lt 1 ] ; then
