@@ -247,7 +247,7 @@ class SwaTool:
         else:
             self._tool_conf = tool_conf
         
-        self._tool_conf.update(SwaTool.get_services_conf(updated_conf['tool-type'], input_root_dir))
+        self._tool_conf.update(SwaTool.get_services_conf(self._tool_conf['tool-type'], input_root_dir))
             
         self._tool_conf = {key: utillib.expandvar(self._tool_conf[key], self._tool_conf) \
                            for key in self._tool_conf}
