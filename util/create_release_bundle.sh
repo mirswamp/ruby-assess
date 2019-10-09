@@ -127,6 +127,15 @@ function copy_scripts {
 function main {
 
     local framework="$(basename $PWD)"
+
+    ## everything is foo-assess   Anything after is another dir ..
+    t=`expr "$framework" : '\(.*-assess\)..*'`
+    if [ -n "$t" ] ; then
+	echo $p: auto-convert $framework TO $t 1>&2
+	framework="$t"
+    fi
+
+
     local new_version="${2:-$(git tag | sort -V | tail -n 1)}"
     local dest_dir="$1/$framework-$new_version"
 
@@ -251,8 +260,13 @@ function main {
 
     (
 	local framework=$(basename "$dest_dir")
+	#echo framework=$framework
+	#echo cd $(dirname "$dest_dir");
 	cd $(dirname "$dest_dir");
-	tar cf "${dest_dir}.tar" "$dest_dir"
+	#echo tar cf "${dest_dir}.tar" "$dest_dir"
+	#tar cf "${dest_dir}.tar" "$dest_dir"
+	echo tar cf "${framework}.tar" "$framework"
+	tar cf "${framework}.tar" "$framework"
     )
 }
 
