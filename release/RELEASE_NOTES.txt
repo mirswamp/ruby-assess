@@ -1,4 +1,15 @@
 -----------------------------------
+ruby-assess version 1.1.11 (Wed Oct 9 11:48:45 CDT 2018)
+-----------------------------------
+- new modular run.sh to allow further changes and improve reliability
+- variable exports changed for run.sh changes
+
+-----------------------------------
+ruby-assess version 1.1.10 (Fri Nov 16 11:48:45 CDT 2018)
+-----------------------------------
+- changes to allow services.conf to over-ride tool.conf
+
+-----------------------------------
 ruby-assess version 1.1.9 (Thu Jun  7 11:48:45 CDT 2018)
 -----------------------------------
 - Fixed rubygems depricated command line option issue
