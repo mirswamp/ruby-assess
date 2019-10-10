@@ -34,6 +34,13 @@ for argument in $options; do
     esac
 done
 
+
+## Done early to allow use in setup scripts
+## export swamp-specific variables for downstream use
+export VMINPUTDIR
+export VMOUTPUTDIR
+
+
 ## XXX can also be $HOME
 swamp_dir=/opt/swamp-base
 ## where rvm is being installed
