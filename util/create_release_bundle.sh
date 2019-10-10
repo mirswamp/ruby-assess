@@ -265,8 +265,19 @@ function main {
 	cd $(dirname "$dest_dir");
 	#echo tar cf "${dest_dir}.tar" "$dest_dir"
 	#tar cf "${dest_dir}.tar" "$dest_dir"
-	echo tar cf "${framework}.tar" "$framework"
-	tar cf "${framework}.tar" "$framework"
+	## compression of the binaries is important; saves
+	## a lot of space.
+	gzit=false
+	gzit=true
+	if $gzit ; then
+		tb=${framework}.tar.gz
+		echo tar cfz "$tb" "$framework"
+		tar cfz "$tb" "$framework"
+	else
+		tb=${framework}.tar
+		echo tar cf "${tb}" "$framework"
+		tar cf "${tb}" "$framework"
+	fi
     )
 }
 
