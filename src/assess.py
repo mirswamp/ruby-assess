@@ -146,8 +146,19 @@ class AssessmentSummary:
 
         self._filename = filename
 
+        ## keep the same name as other frameworks for consistency
+        ## why ruby-assess is wildly different is ??
+        build_summary_obj = build_artifacts_helper;
+
         self._root = ET.Element('assessment-summary')
         AssessmentSummary._add(self._root, 'assessment-summary-uuid', str(uuid.uuid4()))
+
+        if 'build-fw' in build_summary_obj:
+            AssessmentSummary._add(self._root, 'assess-fw', build_summary_obj['build-fw'])
+
+        if 'build-fw-version' in build_summary_obj:
+            AssessmentSummary._add(self._root, 'assess-fw-version', build_summary_obj['build-fw-version'])
+
 
         AssessmentSummary._add(self._root, 'build-root-dir',
                                build_artifacts_helper['build-root-dir'])
@@ -184,6 +195,7 @@ class AssessmentSummary:
 
     def __exit__(self, exception_type, value, traceback):
         AssessmentSummary._add(self._root, 'end-ts', utillib.posix_epoch())
+        AssessmentSummary._add(self._root, 'stop-ts', utillib.posix_epoch())
 
         tree = ET.ElementTree(self._root)
         tree.write(self._filename, encoding='UTF-8', xml_declaration=True)

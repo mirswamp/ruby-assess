@@ -85,6 +85,8 @@ class BuildSummary(metaclass=ABCMeta):
         BuildSummary._add(self._root, 'package-root-dir', pkg_root_dir)
         BuildSummary._add(self._root, 'platform', utillib.platform())
         BuildSummary._add(self._root, 'uuid', utillib.get_uuid())
+        BuildSummary._add(self._root, 'build-fw', 'ruby-assess')
+        BuildSummary._add(self._root, 'build-fw-version', utillib.get_framework_version())
 
     def __enter__(self):
         return self
