@@ -200,8 +200,40 @@ class AssessmentSummary:
         tree = ET.ElementTree(self._root)
         tree.write(self._filename, encoding='UTF-8', xml_declaration=True)
 
+    def add_non_assessment(self, build_artifact_id, cmd, exit_code,
+                           execution_successful, environ, cwd, report, stdout, stderr,
+                           starttime, endtime):
+
+        non_assess_elem = AssessmentSummary._add(self._assessment_artifacts, 'non-assessment')
+
+        if build_artifact_id:
+            AssessmentSummary._add(non_assess_elem, 'build-artifact-id',
+                                   str(build_artifact_id) if isinstance(build_artifact_id, int)
+                                   else build_artifact_id)
+        if osp.isfile(stdout):
+            AssessmentSummary._add(non_assess_elem, 'stdout', osp.basename(stdout))
+        if osp.isfile(stderr):
+            AssessmentSummary._add(non_assess_elem, 'stderr', osp.basename(stderr))
+        AssessmentSummary._add(non_assess_elem, 'exit-code', str(exit_code))
+        AssessmentSummary._add(non_assess_elem, 'execution-successful',
+                utillib.bool_to_string(execution_successful))
+        AssessmentSummary._add(non_assess_elem, 'start-ts', starttime)
+        AssessmentSummary._add(non_assess_elem, 'stop-ts', endtime)
+
+        cmd_elem = AssessmentSummary._add(non_assess_elem, 'command')
+
+        AssessmentSummary._add(cmd_elem, 'cwd', cwd)
+        env_elem = AssessmentSummary._add(cmd_elem, 'environment')
+        for key in environ.keys():
+            AssessmentSummary._add(env_elem, 'env', '{0}={1}'.format(key, environ[key]))
+
+        AssessmentSummary._add(cmd_elem, 'executable', cmd[0])
+        args_elem = AssessmentSummary._add(cmd_elem, 'args')
+        for arg in cmd:
+            AssessmentSummary._add(args_elem, 'arg', arg)
+
     def add_report(self, build_artifact_id, cmd, exit_code,
-                   environ, cwd, report, stdout,
+                   execution_successful, environ, cwd, report, stdout,
                    stderr, starttime, endtime):
 
         assess_elem = AssessmentSummary._add(self._assessment_artifacts, 'assessment')
@@ -214,6 +246,8 @@ class AssessmentSummary:
         AssessmentSummary._add(assess_elem, 'stdout', osp.basename(stdout))
         AssessmentSummary._add(assess_elem, 'stderr', osp.basename(stderr))
         AssessmentSummary._add(assess_elem, 'exit-code', str(exit_code))
+        AssessmentSummary._add(assess_elem, 'execution-successful',
+                utillib.bool_to_string(execution_successful))
         AssessmentSummary._add(assess_elem, 'start-ts', starttime)
         AssessmentSummary._add(assess_elem, 'end-ts', endtime)
 
@@ -226,7 +260,7 @@ class AssessmentSummary:
 
         AssessmentSummary._add(cmd_elem, 'executable', cmd[0])
         args_elem = AssessmentSummary._add(cmd_elem, 'args')
-        for arg in cmd[1:]:
+        for arg in cmd:
             AssessmentSummary._add(args_elem, 'arg', arg)
 
 
@@ -427,29 +461,33 @@ class RubyLint(SwaTool):
                                                              cwd=results_root_dir,
                                                              #env=dict(os.environ))
                                                              env=self._get_env())
+                        end_time = utillib.posix_epoch()
 
                         logging.info('ASSESSMENT WORKING DIR: %s', results_root_dir)
                         logging.info('ASSESSMENT EXIT CODE: %d', exit_code)
                         logging.info('ASSESSMENT ENVIRONMENT: %s', environ)
+
+                        if self._validate_exit_code(exit_code) and \
+                                not RubyLint._has_runtime_errors(errfile):
+                            passed += 1
+                            execution_successful = True
+                        else:
+                            failed += 1
+                            execution_successful = False
 
                         #write assessment summary file
                         #return pass, fail, assessment_summary
                         assessment_summary.add_report(artifacts_id,
                                                       assess_cmd,
                                                       exit_code,
+                                                      execution_successful,
                                                       environ,
                                                       results_root_dir,
                                                       outfile,
                                                       outfile,
                                                       errfile,
                                                       start_time,
-                                                      utillib.posix_epoch())
-
-                        if self._validate_exit_code(exit_code) and \
-                                not RubyLint._has_runtime_errors(errfile):
-                            passed += 1
-                        else:
-                            failed += 1
+                                                      end_time)
 
             return (passed, failed, '', assessment_summary_file)
 
@@ -513,29 +551,33 @@ class RubyTool(SwaTool):
                                                          errfile=errfile,
                                                          cwd=results_root_dir,
                                                          env=self._get_env())
+                    end_time = utillib.posix_epoch()
 
                     logging.info('ASSESSMENT WORKING DIR: %s', results_root_dir)
                     logging.info('ASSESSMENT EXIT CODE: %d', exit_code)
                     logging.info('ASSESSMENT ENVIRONMENT: %s', environ)
+
+                    if self._validate_exit_code(exit_code):
+                        passed += 1
+                        execution_successful = True
+                    else:
+                        failed += 1
+                        err_msgs += self._read_err_msg(exit_code, outfile, errfile)
+                        execution_successful = False
 
                     #write assessment summary file
                     #return pass, fail, assessment_summary
                     assessment_summary.add_report(artifacts['id'],
                                                   assess_cmd,
                                                   exit_code,
+                                                  execution_successful,
                                                   environ,
                                                   results_root_dir,
                                                   assessment_report,
                                                   assessment_report,
                                                   errfile,
                                                   start_time,
-                                                  utillib.posix_epoch())
-
-                    if self._validate_exit_code(exit_code):
-                        passed += 1
-                    else:
-                        failed += 1
-                        err_msgs += self._read_err_msg(exit_code, outfile, errfile)
+                                                  end_time)
                             
                 else:
                     logging.info('ASSESSMENT SKIP (NO SOURCE FILES FOUND)')

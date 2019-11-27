@@ -9,6 +9,7 @@ import re
 import shlex
 import uuid
 import pkgutil
+from . import gencmd
 
 
 if 'PermissionError' in __builtins__:
@@ -201,32 +202,25 @@ def write_to_file(filename, obj):
                 print(entity, file=fobj)
 
 
-PARAM_REGEX = re.compile(r'<(?P<name>[a-zA-Z][a-zA-Z_-]*)(?:[%](?P<sep>[^>]+))?>')
+PARAM_REGEX = re.compile(r'<(?P<name>[a-zA-Z][a-zA-Z0-9-_]*)(?:(?P<op>%|\?\+|\?-)(?P<text>[^>]+))?>')
+
+def param_to_string(match, symbol_table):
+    obj = (match.group('name'), match.group('op'), match.group('text'))
+    value = gencmd.process_parameter(obj, symbol_table)
+
+    if not isinstance(value, str):
+        value = ' '.join(value)
+
+    return value
 
 def string_substitute(string_template, symbol_table):
     '''Substitues environment variables and
     config parameters in the string.
     quotes the string and returns it'''
 
-    new_str = string_template
-    for match in PARAM_REGEX.finditer(string_template):
-        name = match.groupdict()['name']
-        sep = match.groupdict()['sep']
+    f = lambda match : param_to_string(match, symbol_table)
 
-        if name in symbol_table:
-            value = symbol_table[name]
-            if not isinstance(value, str):
-                if sep is None:
-                    value = value[0]
-                else:
-                    value = sep.join(value)
-        else:
-            value = ''
-
-        f = '<{0}>' if sep is None else '<{0}%{1}>'
-        new_str = new_str.replace(f.format(match.groupdict()['name'],
-                                           match.groupdict()['sep']),
-                                  value, 1)
+    new_str = PARAM_REGEX.sub(f, string_template)
 
     return osp.expandvars(new_str)
 
@@ -301,4 +295,19 @@ def get_framework_version():
         return str(version, encoding='utf-8').strip('\n')
     else:
         return 'v.?.?.?'
+
+def bool_to_string(b):
+    if b:
+        return 'true'
+    else:
+        return 'false'
+
+def string_to_bool(s):
+    if s != None \
+            and s != '' \
+            and s != 0 \
+            and s != "false":
+        return True
+    else:
+        return False
 
