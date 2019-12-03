@@ -115,6 +115,8 @@ function copy_scripts {
     echo $new_version > $version_dir/version.txt
     echo '' > $version_dir/__init__.py
 
+    echo $new_version > "${dest_dir}/in-files/build_assess_driver_version.txt"
+
     (
 	cd "$(dirname $scripts_dir)"
 	tar -c -z --file="$(basename $scripts_dir)"".tar.gz" "$(basename $scripts_dir)"
