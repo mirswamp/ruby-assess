@@ -1,4 +1,10 @@
 -----------------------------------
+ruby-assess version 1.2.2 (2020-01-16)
+-----------------------------------
+- Improved low-level provisioning code to include additional diagnostic
+  information, and other small improvements
+
+-----------------------------------
 ruby-assess version 1.2.1 (2019-12-11)
 -----------------------------------
 - always read parsed_results_data.conf if available
