@@ -1,4 +1,10 @@
 -----------------------------------
+ruby-assess version 1.2.3 (2020-01-28)
+-----------------------------------
+- support negative epoch seconds and negative time differences; will not occur
+  in normal operation, but can if the clock is not set or goes backwards
+
+-----------------------------------
 ruby-assess version 1.2.2 (2020-01-16)
 -----------------------------------
 - Improved low-level provisioning code to include additional diagnostic
