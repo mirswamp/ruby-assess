@@ -120,6 +120,14 @@ centos-7.9-64=centos-7.8-64
 rhel-7.9-64=rhel-7.8-64
 scientific-7.9-64=scientific-7.8-64
 #
+centos-7.10-64=centos-7.9-64
+rhel-7.10-64=rhel-7.9-64
+scientific-7.10-64=scientific-7.9-64
+#
+centos-7.11-64=centos-7.10-64
+rhel-7.11-64=rhel-7.10-64
+scientific-7.11-64=scientific-7.10-64
+#
 # old fedora platform names
 fedora-18.0-64=fedora-18-64
 fedora-19.0-64=fedora-19-64
@@ -229,3 +237,19 @@ test-rhel-7.6-64=rhel-7.6-64
 test-centos-7.7-64=centos-7.7-64
 test-scientific-7.7-64=scientific-7.7-64
 test-rhel-7.7-64=rhel-7.7-64
+#
+test-centos-7.8-64=centos-7.8-64
+test-scientific-7.8-64=scientific-7.8-64
+test-rhel-7.8-64=rhel-7.8-64
+#
+test-centos-7.9-64=centos-7.9-64
+test-scientific-7.9-64=scientific-7.9-64
+test-rhel-7.9-64=rhel-7.9-64
+#
+test-centos-7.10-64=centos-7.10-64
+test-scientific-7.10-64=scientific-7.10-64
+test-rhel-7.10-64=rhel-7.10-64
+#
+test-centos-7.11-64=centos-7.11-64
+test-scientific-7.11-64=scientific-7.11-64
+test-rhel-7.11-64=rhel-7.11-64
