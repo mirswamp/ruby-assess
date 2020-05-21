@@ -14,6 +14,10 @@ from .logger import LogTaskStatus
 from .utillib import UnpackArchiveError
 from .utillib import NotADirectoryException
 
+config_stdout = 'config_stdout.out'
+config_stderr = 'config_stderr.out'
+build_stdout = 'build_stdout.out'
+build_stderr = 'build_stderr.out'
 
 class EmptyPackageError(Exception):
 
@@ -190,7 +194,7 @@ class BuildSummaryRubyGem(BuildSummary):
 class RubyPkg(metaclass=ABCMeta):
 
     def __init__(self, pkg_conf_file, input_root_dir, build_root_dir):
-        pass
+        self._build_conf_extras = dict()
 
     def build(self, build_root_dir):
         raise NotImplementedError()
@@ -223,6 +227,13 @@ class RubyPkg(metaclass=ABCMeta):
         logging.info('%s ENVIRONMENT %s', description, _environ)
 
         return (exit_code, _environ)
+
+    def add_build_conf_attr(self, name, value):
+        self._build_conf_extras[name] = value
+
+    def get_build_conf_extras(self):
+        return self._build_conf_extras
+
 
 
 class RubySrc(RubyPkg, metaclass=ABCMeta):
@@ -302,8 +313,11 @@ class RubySrc(RubyPkg, metaclass=ABCMeta):
                 config_cmd = '%s %s' % (self.pkg_conf['config-cmd'],
                                         self.pkg_conf.get('config-opt', ''))
 
-                outfile = osp.join(build_root_dir, 'config_stdout.out')
-                errfile = osp.join(build_root_dir, 'config_stderr.out')
+                outfile = osp.join(build_root_dir, config_stdout)
+                errfile = osp.join(build_root_dir, config_stderr)
+
+                self.add_build_conf_attr('config-stdout-file', config_stdout)
+                self.add_build_conf_attr('config-stderr-file', config_stderr)
 
                 (exit_code, environ) = RubyPkg.run_cmd(config_cmd,
                                                        config_dir,
@@ -412,8 +426,10 @@ class RubyBundlerRake(RubySrc):
                                 (self.pkg_conf.get('build-file', 'Rakefile'),
                                  self.pkg_conf.get('build-target', ''))
 
-                    outfile = osp.join(build_root_dir, 'build_stdout.out')
-                    errfile = osp.join(build_root_dir, 'build_stderr.err')
+                    outfile = osp.join(build_root_dir, build_stdout)
+                    errfile = osp.join(build_root_dir, build_stderr)
+                    self.add_build_conf_attr('build-stdout-file', build_stdout)
+                    self.add_build_conf_attr('build-stderr-file', build_stderr)
 
                     (exit_code, environ) = RubyPkg.run_cmd(build_cmd,
                                                            pkg_build_dir,
@@ -443,8 +459,10 @@ class RubyBundlerRake(RubySrc):
                                                              self.pkg_conf.get('build-opt', ''),
                                                              self.pkg_conf.get('build-target', ''))
 
-                    outfile = osp.join(build_root_dir, 'build_stdout.out')
-                    errfile = osp.join(build_root_dir, 'build_stderr.err')
+                    outfile = osp.join(build_root_dir, build_stdout)
+                    errfile = osp.join(build_root_dir, build_stderr)
+                    self.add_build_conf_attr('build-stdout-file', build_stdout)
+                    self.add_build_conf_attr('build-stderr-file', build_stderr)
 
                     (exit_code, environ) = RubyPkg.run_cmd(build_cmd,
                                                            pkg_build_dir,
@@ -538,8 +556,10 @@ class RubyRake(RubySrc):
                                                       self.pkg_conf.get('build-dir', '.')))
 
                 build_cmd = self._get_build_command()
-                outfile = osp.join(build_root_dir, 'build_stdout.out')
-                errfile = osp.join(build_root_dir, 'build_stderr.err')
+                outfile = osp.join(build_root_dir, build_stdout)
+                errfile = osp.join(build_root_dir, build_stderr)
+                self.add_build_conf_attr('build-stdout-file', build_stdout)
+                self.add_build_conf_attr('build-stderr-file', build_stderr)
 
                 (exit_code, environ) = RubyPkg.run_cmd(build_cmd,
                                                        pkg_build_dir,
@@ -838,7 +858,8 @@ def build(input_root_dir, output_root_dir, build_root_dir):
                                                 osp.basename(build_root_dir))
 
             build_conf['build-archive'] = osp.basename(build_archive)
-            build_conf['build-root-dir'] = osp.basename(build_root_dir)
+            build_conf['build-dir'] = osp.basename(build_root_dir)
+            build_conf.update(pkg_obj.get_build_conf_extras())
 
             utillib.write_to_file(osp.join(output_root_dir, 'build.conf'), build_conf)
 

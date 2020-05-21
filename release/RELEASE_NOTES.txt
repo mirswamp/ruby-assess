@@ -1,4 +1,17 @@
 -----------------------------------
+ruby-assess version 1.2.5 (2020-05-20)
+-----------------------------------
+- add missing keys and values to build.conf: build-stderr-file,
+  build-stdout-file, config-stderr-file, and config-stdout-file
+- changed build.conf key: build-root-dir -> build-dir
+- use stop-ts instead of end-ts in assessment_summary.xml
+
+-----------------------------------
+ruby-assess version 1.2.4 (2020-04-09)
+-----------------------------------
+- Update build config and dependencies for current platforms.
+
+-----------------------------------
 ruby-assess version 1.2.3 (2020-01-28)
 -----------------------------------
 - support negative epoch seconds and negative time differences; will not occur
