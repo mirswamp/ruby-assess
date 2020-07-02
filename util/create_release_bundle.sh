@@ -4,19 +4,42 @@ p=`basename $0`
 
 p_swamp=/p/swamp
 
-## hack for vamshi's laptop environment
-if [ ! -d $p_swamp ] ; then
-    p_swamp=$HOME/$p_swamp
-    echo $p: adjusting /p/swamp for vamshi
+## OK, special case parsing for this, as everything else
+## is positional
+case $1 in
+--swamp-root)
+	p_swamp=$2
+	shift		## swamp-root
+	shift		## the dir
+	;;
+esac
+
+if [ ! -d "$p_swamp" ] ; then
+	echo $p: $p_swamp: swamp root missing 1>&2
+	exit 1
 fi
 
-update_platform=$p_swamp/frameworks/platform/update-platform
+if false ; then
+	## hack for vamshi's laptop environment
+	if [ ! -d $p_swamp ] ; then
+	    p_swamp=$HOME/$p_swamp
+	    echo $p: adjusting /p/swamp for vamshi
+	fi
+fi
+
+p_swamp_fw=${p_swamp}/frameworks
+
+update_platform=$p_swamp_fw/platform/update-platform
 
 if [ ! -x $update_platform ] ; then
     echo $p: platform update tool missing/unusable 1>&2
     exit 1
 fi
 
+swamp_root=
+if [ "$p_swamp" != /p/swamp ] ; then
+	swamp_root="--swamp-root $p_swamp"
+fi
 
 plat_list_file=util/all_platforms.txt
 if [ ! -s "$plat_list_file" ] ; then
@@ -53,7 +76,7 @@ ruby_binary=ruby-2.4.0-binaries
 ## new style, pick an arch dir to incorporate
 ruby_arch=$PWD/ruby-arch
 ## moved out of here into common AFS location.
-ruby_arch=$p_swamp/frameworks/ruby/ruby-arch
+ruby_arch=$p_swamp_fw/ruby/ruby-arch
 
 
 ## the name of the file containingthe checksums
@@ -108,7 +131,7 @@ function copy_scripts {
     cp -r $PWD/src/* $ruby_assess_dir
 
     ## get the platform level files
-    $update_platform --dir "$dest_dir/in-files"
+    $update_platform $swamp_root --dir "$dest_dir/in-files"
 
     local version_dir="$lib_dir/version"
     mkdir -p $version_dir
